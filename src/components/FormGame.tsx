@@ -26,7 +26,9 @@ function FormGame() {
                                 ? "bg-[var(--color-orange)] text-black shadow-md"
                                 : "bg-[var(--color-gray-darker)] hover:border-[var(--color-orange)]"
 
-                        }`}/>
+                        }`}
+                        overwrite={true}
+                    />
                     <Button
                         text={<><Users /> Multijoueur</>}
                         action={() => setArePlayer(2)}
@@ -36,7 +38,9 @@ function FormGame() {
                                 ? "bg-[var(--color-orange)] text-black shadow-md"
                                 : "bg-[var(--color-gray-darker)] hover:border-[var(--color-orange)]"
 
-                        }`}/>
+                        }`}
+                        overwrite={true}
+                    />
                 </section>
             </div>
 
@@ -54,6 +58,7 @@ function FormGame() {
                                 ? "bg-[var(--color-orange)] text-black shadow-md"
                                 : "bg-[var(--color-gray-darker)] hover:border-[var(--color-orange)]"
                         }`}
+                        overwrite={true}
                     />
                     <Button
                         text={<><Infinity /> 3 coups</>}
@@ -64,6 +69,7 @@ function FormGame() {
                                 ? "bg-[var(--color-orange)] text-black shadow-md"
                                 : "bg-[var(--color-gray-darker)] hover:border-[var(--color-orange)]"
                         }`}
+                        overwrite={true}
                     />
                 </section>
             </div>
