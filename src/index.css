@@ -3,11 +3,11 @@
 @theme {
     --color-cyan: #36CDCA;
     --color-orange: #F6BC47;
-    --color-orange-omber: #CE8E14;
+    --color-orange-shadow: #CE8E14;
     --color-gray-light: #B6CAD3;
-    --color-gray-light-omber: #7D9AA7;
+    --color-gray-light-shadow: #7D9AA7;
     --color-gray-dark: #284551;
-    --color-gray-dark-omber: #132C36;
+    --color-gray-dark-shadow: #132C36;
     --color-gray-darker: #203741;
     --font-display: "Roboto", sans-serif;
 }
