@@ -2,12 +2,13 @@ import Board from "../components/Board.tsx";
 import {Link} from "react-router";
 import { ArrowBigLeft, Save, RotateCcw } from "lucide-react"
 import Button from "@/components/Button.tsx";
-import {useContext} from "react";
-import {BoardContext} from "@/context/BoardContext.tsx";
 import { X, Circle } from "lucide-react"
+import {useGame} from "@/hooks/useGame.tsx";
 
 function Game() {
-    const boardContext = useContext(BoardContext)
+    const {
+        curentPlayer
+    } = useGame()
 
     return (
         <>
@@ -27,9 +28,9 @@ function Game() {
                     <div className="flex flew-row justify-between items-center rounded-xl text-xl p-2 mt-3 bg-gray-light
                     text-black shadow-[0_4px_0_var(--color-gray-light-shadow)]">
                         {
-                            boardContext.curentPlayer === "X" ? <X /> : <Circle />
+                            curentPlayer === "X" ? <X /> : <Circle />
                         }
-                        Turn
+                         Turn
                     </div>
                 </section>
             </div>

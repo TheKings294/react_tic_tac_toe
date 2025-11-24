@@ -98,7 +98,7 @@ function FormGame() {
                             id="player2"
                             className="bg-[var(--color-gray-dark)] border border-[var(--color-gray-light-omber)]
                             text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-cyan)]"
-                            placeholder="John Doe"
+                            placeholder="Jane Doe"
                             required={arePlayer === 2}
                         />
                     </section>
