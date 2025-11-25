@@ -13,6 +13,7 @@ export default function Footer() {
                 <nav className="flex flex-col items-center gap-3 md:flex-row md:gap-6">
                     <Link to="/" className="text-sm">Home</Link>
                     <Link to="/board" className="text-sm">Leader board</Link>
+                    <Link to="/game" className="text-sm">Game</Link>
                 </nav>
 
                 <div className="flex gap-4 text-sm">

@@ -121,10 +121,7 @@ function FormGame() {
                 </div>
             )}
 
-            <button className="bg-[var(--color-orange)] text-black font-semibold px-6 py-3 text-lg rounded-xl
-            shadow-lg hover:scale-105 transition-all duration-200">
-                Commencer la partie
-            </button>
+            <Button text={"Commencer la partie"} theme={"orange"} />
         </form>
     );
 }

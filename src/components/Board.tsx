@@ -1,13 +1,27 @@
-import circle from "@/assets/circle.svg";
-import cross from "@/assets/cross.svg";
 import Button from "@/components/Button.tsx";
 import {useGame} from "@/hooks/useGame.tsx";
+import Cross from "@/components/Cross.tsx";
+import Circle from "@/components/Circle.tsx";
+import {useCallback} from "react";
+import clsx from "clsx";
 
 function Board() {
     const {
         board,
-        move
+        move,
+        winPattern
     } = useGame();
+
+    const getButtonClassName = useCallback((rowIndex: number, colIndex: number, cell: string) => {
+        if (!winPattern) return "";
+
+        if (winPattern.some(([first, second]) => first === rowIndex && second === colIndex)) {
+            if (cell === "X") return "!bg-cross !text-gray-dark";
+            return "!bg-circle !text-gray-darker";
+        }
+
+        return "";
+    }, [winPattern]);
 
     return (
         <>
@@ -17,14 +31,18 @@ function Board() {
                         row.map((cell, colIndex) => (
                             <Button
                                 text={
-                                    cell === "X" ? <img src={cross} alt={"circle"} /> :
-                                    cell === "O" ? <img src={circle} alt={"cross"} /> :
-                                        ""
+                                    cell === "X" ? <Cross /> :
+                                    cell === "O" ? <Circle /> :
+                                    ""
                                 }
-                                className="rounded-lg p-4 w-full aspect-square"
+                                className={clsx(getButtonClassName(rowIndex, colIndex, cell), "rounded-lg p-4 w-full aspect-square",
+                                    cell === "X" && !winPattern ?
+                                        "!text-cross" : "!text-circle"
+                                )}
                                 theme={"grayDark"}
-                                action={() => move({ x: colIndex, y: rowIndex })}
-                                key={rowIndex-colIndex}
+                                action={() => move({x: colIndex, y: rowIndex})}
+                                key={rowIndex - colIndex}
+                                overwrite={false}
                             />
                         ))
                     ))
@@ -35,3 +53,6 @@ function Board() {
 }
 
 export default Board;
+
+
+{/*rounded-lg p-4 w-full aspect-square*/}

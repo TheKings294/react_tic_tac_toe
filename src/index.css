@@ -10,6 +10,8 @@
     --color-gray-dark-shadow: #132C36;
     --color-gray-darker: #203741;
     --font-display: "Roboto", sans-serif;
+    --color-cross: #36cdca;
+    --color-circle: #F6BC47;
 }
 
 @layer base {

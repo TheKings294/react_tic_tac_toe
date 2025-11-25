@@ -1,4 +1,4 @@
-import type {BoardType, Move} from "@/types/BoardType.ts";
+import type {BoardType} from "@/types/BoardType.ts";
 import {INITIAL_BOARD} from "@/constant/Constant.ts";
 import type {BoardContextType} from "@/context/BoardContext.tsx";
 
@@ -18,8 +18,10 @@ export const initialState: BoardContextType = {
     isFinished: false,
     timer: 0,
     playerShot: 0,
-    move: (movemnt: Move) => {},
+    move: () => {},
     history: undefined,
+    modalIsOpen: false,
+    winPattern: undefined
 }
 
 export function reducer(state: BoardContextType, action: BoardAction): BoardContextType {
@@ -34,6 +36,21 @@ export function reducer(state: BoardContextType, action: BoardAction): BoardCont
                 ...state,
                 curentPlayer: action.payload.curentPlayer as string,
             };
+        case 'switch_modal':
+            return {
+                ...state,
+                modalIsOpen: action.payload.modalIsOpen as boolean,
+            }
+        case 'set_win_pattern':
+            return {
+                ...state,
+                winPattern: action.payload.winPattern,
+            }
+        case 'set_finish' :
+            return {
+                ...state,
+                isFinished: true,
+            }
         default:
             return state;
     }

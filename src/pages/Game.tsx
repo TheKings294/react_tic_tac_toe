@@ -4,14 +4,17 @@ import { ArrowBigLeft, Save, RotateCcw } from "lucide-react"
 import Button from "@/components/Button.tsx";
 import { X, Circle } from "lucide-react"
 import {useGame} from "@/hooks/useGame.tsx";
+import BannerModal from "@/components/Modal.tsx";
 
 function Game() {
     const {
-        curentPlayer
+        curentPlayer,
+        modalIsOpen,
     } = useGame()
 
     return (
         <>
+            <BannerModal isOpen={modalIsOpen} onClose={() => !modalIsOpen}/>
             <div className="flex flex-row items-center justify-between m-2">
                 <Link to="/">
                     <Button text={<><ArrowBigLeft /> Home</>} />
