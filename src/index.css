@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+    --color-cyan: #36CDCA;
+    --color-orange: #F6BC47;
+    --color-orange-shadow: #CE8E14;
+    --color-gray-light: #B6CAD3;
+    --color-gray-light-shadow: #7D9AA7;
+    --color-gray-dark: #284551;
+    --color-gray-dark-shadow: #132C36;
+    --color-gray-darker: #203741;
+    --font-display: "Roboto", sans-serif;
+    --color-cross: #36cdca;
+    --color-circle: #F6BC47;
+}
+
+@layer base {
+    html {
+        @apply bg-gray-darker font-display;
+    }
+}
