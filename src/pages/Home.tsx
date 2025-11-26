@@ -22,7 +22,7 @@ function Home() {
         if (game.username !== "") {
             loadGame()
         }
-    }, [game.username]);
+    }, [game.username, loadGame]);
 
     return (
         <>

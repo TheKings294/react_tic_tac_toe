@@ -13,6 +13,7 @@ export default function Cross(props: React.SVGProps<SVGSVGElement>) {
                 strokeMiterlimit: 2,
                 ...(props.style || {})
             }}
+            aria-label={"croix"}
         >
             <g transform="matrix(1.27895,0,0,1.27895,-6.92671,-6.46265)">
                 <path

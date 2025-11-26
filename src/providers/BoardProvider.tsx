@@ -144,6 +144,8 @@ export function BoardProvider({children}: {children: ReactNode}) {
         return board.flat().every(cell => cell !== "#")
     }
 
+
+
     const placeMove = (move: Move): void => {
         const newBoard: BoardType = state.board.map((row, rowIndex) => {
             return row.map((line, lineIndex) =>
