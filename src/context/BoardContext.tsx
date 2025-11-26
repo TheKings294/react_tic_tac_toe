@@ -1,6 +1,7 @@
 import {createContext} from "react";
 import type {BoardType, History, Move, Pattern} from "../types/BoardType.ts";
 import {INITIAL_BOARD} from "../constant/Constant.ts";
+import type {PlayerType} from "@/types/PlayerType.ts";
 
 export type BoardContextType = {
     board: BoardType;
@@ -13,10 +14,13 @@ export type BoardContextType = {
     timer: number;
     playerShot: number;
     move: (movemnt: Move) => void;
-    history: History | undefined;
+    history: History;
     modalIsOpen: boolean;
     winPattern: Pattern | undefined;
     gameMode: number;
+    players: PlayerType[];
+    setPlayers: (players: PlayerType[]) => void;
+    setGameMode: (gameMdoe: number) => void;
 }
 
 export const BoardContext = createContext<BoardContextType>({
@@ -30,8 +34,15 @@ export const BoardContext = createContext<BoardContextType>({
     timer: 0,
     playerShot: 0,
     move: () => {},
-    history: undefined,
+    history:  [],
     modalIsOpen: false,
     winPattern: undefined,
     gameMode: 1,
+    players: [],
+    setPlayers: (players: PlayerType[]) => {
+        return players;
+    },
+    setGameMode: (gameMdoe: number) => {
+        return gameMdoe;
+    }
 })

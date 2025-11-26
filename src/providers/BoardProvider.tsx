@@ -2,7 +2,8 @@ import {type ReactNode, useEffect, useReducer} from "react";
 import {BoardContext, type BoardContextType} from "@/context/BoardContext.tsx";
 import {reducer, initialState as boardInitialState} from "@/utils/reducer.ts";
 import {easyBot} from "@/game-logic/easyBot.ts";
-import type {BoardType, Move, Pattern} from "@/types/BoardType.ts";
+import type {BoardType, History, Move, Pattern} from "@/types/BoardType.ts";
+import type {PlayerType} from "@/types/PlayerType.ts";
 
 export function BoardProvider({children}: {children: ReactNode}) {
     const [state, dispatch] = useReducer(reducer, boardInitialState)
@@ -22,6 +23,20 @@ export function BoardProvider({children}: {children: ReactNode}) {
         })
     }
 
+    const setPlayersFunction = (players: PlayerType[]) => {
+        dispatch({
+            type: "set_players",
+            payload: {players: players},
+        })
+    }
+
+    const setGameModeFunction = (gameMode: number) => {
+        dispatch({
+            type: "set_game_mode",
+            payload: {gameMode: gameMode},
+        })
+    }
+
     const switchPlayer = (): void => {
         const notCurentPlayer = state.curentPlayer === "X" ? "O" : "X"
 
@@ -29,6 +44,11 @@ export function BoardProvider({children}: {children: ReactNode}) {
             type: "switch_player",
             payload: {curentPlayer: notCurentPlayer}
         })
+    }
+
+    const checkIfPlayeMoreThan3 = (historic: History) => {
+        const playerMoves = historic.filter(move => move.player.name === state.curentPlayer)
+        return playerMoves.length > 3
     }
 
     const placeMove = (move: Move): void => {
@@ -39,7 +59,23 @@ export function BoardProvider({children}: {children: ReactNode}) {
         })
 
         if (state.gameMode === 2) {
+            const newHistoryMove: History = [...state.history,  {
+                player: {name: state.curentPlayer},
+                move: move
+            }]
 
+
+            if (newHistoryMove.length > 3 && checkIfPlayeMoreThan3(newHistoryMove)) {
+                const oldesMove = newHistoryMove.shift()
+                if (oldesMove) {
+                    newBoard[oldesMove.move.x][oldesMove.move.y] = "#"
+                }
+            }
+
+            dispatch({
+                type: "set_history",
+                payload: {history: newHistoryMove},
+            })
         }
 
         dispatch({
@@ -110,14 +146,17 @@ export function BoardProvider({children}: {children: ReactNode}) {
         modalIsOpen: state.modalIsOpen,
         winPattern: state.winPattern,
         gameMode: state.gameMode,
+        players: state.players,
+        setPlayers: setPlayersFunction,
+        setGameMode: setGameModeFunction,
     }
 
     useEffect(() => {
-        if (state.curentPlayer === 'O' && !state.isFinished && state.gameMode === 1) {
+        if (state.curentPlayer === 'O' && !state.isFinished && state.players.length === 1) {
             const timer = setTimeout(() => easyBot(state.board, placeMove), 500);
             return () => clearTimeout(timer);
         }
-    }, [state.curentPlayer, state.isFinished, state.board, placeMove, state.gameMode]);
+    }, [state.curentPlayer, state.isFinished, state.board, placeMove, state.players]);
 
     return (
         <BoardContext.Provider value={contextValues}>
