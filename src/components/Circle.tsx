@@ -13,6 +13,7 @@ export default function Circle(props: React.SVGProps<SVGSVGElement>) {
                 strokeMiterlimit: 2,
                 ...(props.style || {})
             }}
+            aria-label={"cercle"}
         >
             <path
                 d="M24,0C37.246,0 48,10.754 48,24C48,37.246 37.246,48 24,48C10.754,48 0,37.246 0,24C0,10.754 10.754,0

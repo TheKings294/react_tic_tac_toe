@@ -6,7 +6,7 @@ function MainPage() {
     return (
         <>
             <Navbar />
-            <Outlet />
+                <Outlet />
             <Footer />
         </>
     )
