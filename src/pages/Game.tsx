@@ -10,6 +10,7 @@ function Game() {
     const {
         curentPlayer,
         modalIsOpen,
+        players,
     } = useGame()
 
     return (
@@ -19,7 +20,22 @@ function Game() {
                 <Link to="/">
                     <Button text={<><ArrowBigLeft /> Home</>} />
                 </Link>
-                <h1 className="text-6xl leading-tight text-center text-gray-light">Game</h1>
+                <h1 className="text-6xl leading-tight text-center text-gray-light">
+                    {
+                        players.length === 2 ?
+                            <>
+                                <span>{players[0].name}</span>
+                                <span> VS </span>
+                                <span>{players[1].name}</span>
+                            </>
+                             :
+                            <>
+                                <span>CPU</span>
+                                <span> VS </span>
+                                <span>{players[0].name}</span>
+                            </>
+                    }
+                </h1>
                 <div className="flex flex-row gap-2">
                     <Button text={<><RotateCcw /></>} theme={"grayLight"} />
                     <Button text={<><Save /> Save</>} />

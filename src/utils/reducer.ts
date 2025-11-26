@@ -1,6 +1,7 @@
 import type {BoardType} from "@/types/BoardType.ts";
 import {INITIAL_BOARD} from "@/constant/Constant.ts";
 import type {BoardContextType} from "@/context/BoardContext.tsx";
+import type {PlayerType} from "@/types/PlayerType.ts";
 
 export interface BoardAction {
     type: string;
@@ -9,7 +10,6 @@ export interface BoardAction {
 
 export const initialState: BoardContextType = {
     board: INITIAL_BOARD,
-    algo: () => {},
     curentPlayer: "X",
     winCondition: () => {},
     saveGame: () => {},
@@ -19,9 +19,17 @@ export const initialState: BoardContextType = {
     timer: 0,
     playerShot: 0,
     move: () => {},
-    history: undefined,
+    history:  [],
     modalIsOpen: false,
-    winPattern: undefined
+    winPattern: undefined,
+    gameMode: 1,
+    players: [],
+    setPlayers: (players: PlayerType[]) => {
+        return players;
+    },
+    setGameMode: (gameMdoe: number) => {
+        return gameMdoe;
+    }
 }
 
 export function reducer(state: BoardContextType, action: BoardAction): BoardContextType {
@@ -50,6 +58,30 @@ export function reducer(state: BoardContextType, action: BoardAction): BoardCont
             return {
                 ...state,
                 isFinished: true,
+            }
+        case 'set_history' :
+            if (!action.payload.history) {
+                return state
+            }
+            return {
+                ...state,
+                history: action.payload.history
+            }
+        case 'set_players' :
+            if (!action.payload.players) {
+                return state
+            }
+            return {
+                ...state,
+                players: action.payload.players
+            }
+        case 'set_game_mode':
+            if (!action.payload.gameMode) {
+                return state
+            }
+            return {
+                ...state,
+                gameMode: action.payload.gameMode
             }
         default:
             return state;

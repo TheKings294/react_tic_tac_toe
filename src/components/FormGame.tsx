@@ -1,16 +1,40 @@
-import {useState} from "react";
+import React, {useState, useRef} from "react";
 import {Cpu, Users, X, Infinity} from "lucide-react";
 import Button from "./Button.tsx";
+import {useGame} from "@/hooks/useGame.tsx";
+import {useNavigate} from "react-router";
 
 function FormGame() {
     const [arePlayer, setArePlayer] = useState<number>(1)
-    const [gameMode, setGameMode] = useState<number>(1)
+    const [gameMode, setGameModeForm] = useState<number>(1)
+    const [player1, setPlayer1] = useState<string>("")
+    const [player2, setPlayer2] = useState<string>("")
+    const {
+        setPlayers,
+        setGameMode
+    } = useGame()
+    const navigate = useNavigate();
+    const formRef = useRef<HTMLFormElement>(null);
 
+    const setStateForGame = (e: React.FormEvent) => {
+        e.preventDefault()
+        setGameMode(gameMode)
+        const players = []
 
+        if (arePlayer === 2) {
+            players.push({name: player1}, {name: player2})
+        } else {
+            players.push({name: player1})
+        }
+
+        setPlayers(players)
+        navigate("/game")
+    }
     return (
         <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={(e) => setStateForGame(e)}
             className="flex flex-col items-center justify-center w-full gap-8 p-6 text-white lg:w-auto"
+            ref={formRef}
         >
             <div className="flex flex-col items-center w-full gap-4">
                 <label className="text-2xl font-semibold text-[var(--color-cyan)]">
@@ -51,7 +75,7 @@ function FormGame() {
                 <section className="flex flex-row items-center justify-center w-full gap-6 text-xl">
                     <Button
                         text={<><X /> Classic</>}
-                        action={() => setGameMode(1)}
+                        action={() => setGameModeForm(1)}
                         className={`flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all 
                         duration-200 hover:scale-105 border border-transparent ${
                             gameMode === 1
@@ -62,7 +86,7 @@ function FormGame() {
                     />
                     <Button
                         text={<><Infinity /> 3 coups</>}
-                        action={() => setGameMode(2)}
+                        action={() => setGameModeForm(2)}
                         className={`flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all 
                         duration-200 hover:scale-105 border border-transparent ${
                             gameMode === 2
@@ -86,6 +110,8 @@ function FormGame() {
                             text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-cyan)]"
                             placeholder="John Doe"
                             required={arePlayer === 2}
+                            value={player1}
+                            onChange={(e) => setPlayer1(e.target.value)}
                         />
                     </section>
 
@@ -100,6 +126,8 @@ function FormGame() {
                             text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-cyan)]"
                             placeholder="Jane Doe"
                             required={arePlayer === 2}
+                            value={player2}
+                            onChange={(e) => setPlayer2(e.target.value)}
                         />
                     </section>
                 </div>
@@ -116,12 +144,14 @@ function FormGame() {
                             text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-cyan)]"
                             placeholder="John Doe"
                             required={arePlayer === 1}
+                            value={player1}
+                            onChange={(e) => setPlayer1(e.target.value)}
                         />
                     </section>
                 </div>
             )}
 
-            <Button text={"Commencer la partie"} theme={"orange"} />
+            <Button text={"Commencer la partie"} theme={"orange"} action={() => formRef.current?.requestSubmit()} />
         </form>
     );
 }
