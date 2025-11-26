@@ -29,7 +29,9 @@ export const initialState: BoardContextType = {
     },
     setGameMode: (gameMdoe: number) => {
         return gameMdoe;
-    }
+    },
+    winner: undefined,
+    nextGame: () => {}
 }
 
 export function reducer(state: BoardContextType, action: BoardAction): BoardContextType {
@@ -57,7 +59,7 @@ export function reducer(state: BoardContextType, action: BoardAction): BoardCont
         case 'set_finish' :
             return {
                 ...state,
-                isFinished: true,
+                isFinished: action.payload.isFinished as boolean,
             }
         case 'set_history' :
             if (!action.payload.history) {
@@ -82,6 +84,11 @@ export function reducer(state: BoardContextType, action: BoardAction): BoardCont
             return {
                 ...state,
                 gameMode: action.payload.gameMode
+            }
+        case 'set_winner':
+            return {
+                ...state,
+                winner: action.payload.winner
             }
         default:
             return state;

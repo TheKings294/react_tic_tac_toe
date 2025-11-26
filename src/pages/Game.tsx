@@ -1,21 +1,44 @@
 import Board from "../components/Board.tsx";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import { ArrowBigLeft, Save, RotateCcw } from "lucide-react"
 import Button from "@/components/Button.tsx";
 import { X, Circle } from "lucide-react"
 import {useGame} from "@/hooks/useGame.tsx";
 import BannerModal from "@/components/Modal.tsx";
+import Cross from "@/components/Cross.tsx";
+import clsx from "clsx";
 
 function Game() {
     const {
         curentPlayer,
         modalIsOpen,
         players,
+        winner,
+        nextGame,
     } = useGame()
+
+    const navigate = useNavigate();
 
     return (
         <>
-            <BannerModal isOpen={modalIsOpen} onClose={() => !modalIsOpen}/>
+            <BannerModal
+                isOpen={modalIsOpen}
+                onClose={() => navigate("/")}
+                children={
+                <>
+                    {winner ?
+                        <div className="flex flex-col gap-3">
+                            <span
+                                className={clsx("text-3xl flex flex-row items-center justify-center",
+                                    (winner.name === "X" ? "text-cross": "text-circle"))}>
+                                {winner.name === "X" ? <Cross /> : <Circle />} won the round
+                            </span>
+                            <Button text={"Jeux Suivant"} theme={"orange"} action={nextGame} />
+                        </div>
+                        : <span></span>}
+                </>
+                }
+            />
             <div className="flex flex-row items-center justify-between m-2">
                 <Link to="/">
                     <Button text={<><ArrowBigLeft /> Home</>} />

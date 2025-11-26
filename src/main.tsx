@@ -9,6 +9,7 @@ import Error from "./pages/Error.tsx";
 
 import './index.css'
 import {BoardProvider} from "@/providers/BoardProvider.tsx";
+import ScoreProvider from "@/providers/ScoreProvider.tsx";
 
 const router = createBrowserRouter([
     {
@@ -25,7 +26,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BoardProvider>
-          <RouterProvider router={router} />
+          <ScoreProvider>
+              <RouterProvider router={router} />
+          </ScoreProvider>
       </BoardProvider>
   </StrictMode>,
 )

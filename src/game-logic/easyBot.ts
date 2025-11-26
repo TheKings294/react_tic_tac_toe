@@ -9,9 +9,11 @@ export const easyBot = (board: BoardType, move: ({x, y}: Move) => void) => {
         })
     })
 
-    console.log(board, availableCells)
 
+    console.log(availableCells);
     const [x, y] = availableCells[Math.floor(Math.random() * availableCells.length)]
 
-    move({ x, y });
+    console.log(x, y)
+
+    move({ x: y, y:  x });
 }

@@ -16,7 +16,6 @@ function Navbar() {
                 <button
                     onClick={() => {
                         setOpen(!open)
-                        console.log(open)
                     }}
                     className="md:hidden"
                     aria-label="Toggle Menu"
