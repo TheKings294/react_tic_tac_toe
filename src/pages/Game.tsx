@@ -15,6 +15,8 @@ function Game() {
         players,
         winner,
         nextGame,
+        leaveGame,
+        saveGame,
     } = useGame()
 
     const navigate = useNavigate();
@@ -31,15 +33,21 @@ function Game() {
                             <span
                                 className={clsx("text-3xl flex flex-row items-center justify-center",
                                     (winner.name === "X" ? "text-cross": "text-circle"))}>
-                                {winner.name === "X" ? <Cross /> : <Circle />} won the round
+                                {winner.name === "X" ? <Cross /> : <Circle />} gagne la partie
                             </span>
                             <Button text={"Jeux Suivant"} theme={"orange"} action={nextGame} />
                         </div>
-                        : <span></span>}
+                        : <div className="flex flex-col gap-3">
+                            <span
+                                className={"text-3xl flex flex-row items-center justify-center text-gray-light"}>
+                                Égalité
+                            </span>
+                            <Button text={"Jeux Suivant"} theme={"orange"} action={nextGame} />
+                        </div>}
                 </>
                 }
             />
-            <div className="flex flex-row items-center justify-between m-2">
+            <div className="flex lg:flex-row items-center justify-between m-2 flex-col">
                 <Link to="/">
                     <Button text={<><ArrowBigLeft /> Home</>} />
                 </Link>
@@ -60,8 +68,11 @@ function Game() {
                     }
                 </h1>
                 <div className="flex flex-row gap-2">
-                    <Button text={<><RotateCcw /></>} theme={"grayLight"} />
-                    <Button text={<><Save /> Save</>} />
+                    <Button text={<><RotateCcw /> Leave</>} theme={"grayLight"} action={() => {
+                        leaveGame();
+                        navigate("/");
+                    }} />
+                    <Button text={<><Save /> Save</>} action={saveGame}/>
                 </div>
             </div>
             <div className="flex flex-col items-center justify-between mt-4">

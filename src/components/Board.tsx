@@ -25,7 +25,7 @@ function Board() {
 
     return (
         <>
-            <div className="grid grid-rows-3 grid-cols-3 gap-4 rounded-2xl bg-gray-light p-6 min-w-xl">
+            <div className="grid grid-rows-3 grid-cols-3 gap-4 rounded-2xl bg-gray-light p-6 lg:min-w-xl min-w-dvw">
                 {
                     board.map((row, rowIndex) => (
                         row.map((cell, colIndex) => (
@@ -53,6 +53,3 @@ function Board() {
 }
 
 export default Board;
-
-
-{/*rounded-lg p-4 w-full aspect-square*/}

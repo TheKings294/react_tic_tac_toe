@@ -1,5 +1,7 @@
 import {motion} from "framer-motion";
 import type {ScoreboardType} from "@/types/ScoreBoardType.ts";
+import {containsRank} from "@/utils";
+import {Crown} from 'lucide-react'
 
 function ScoreTable({scoreBoard}: {
     scoreBoard: ScoreboardType[]
@@ -27,6 +29,33 @@ function ScoreTable({scoreBoard}: {
             </thead>
             <tbody>
             {
+                containsRank(scoreBoard) ?
+                    scoreBoard.map((score, idx) => (
+                        <tr key={idx} className="text-center
+                                odd:bg-gray-dark-500
+                                even:bg-gray-dark-shadow
+                                transition-colors">
+                            <td>
+                                {score.rank === 1 ?
+                                    (
+                                        <div className="flex items-center gap-2 text-secondary justify-center">
+                                            <Crown className="size-4"/>
+                                            <span className="underline">
+                                        {
+                                            score.rank
+                                        }
+                                        </span>
+                                        </div>
+                                    ) : score.rank
+                                }
+                            </td>
+                            <td>{score.username}</td>
+                            <td>{score.winStreak}</td>
+                            <td>{score.gameMode === 1 ? "Solo" : "Multijoeur"}</td>
+                            <td className="max-sm:hidden">{new Date(score.timestamp).toLocaleString()}</td>
+                        </tr>
+                    ))
+                :
                 scoreBoard.map((score: ScoreboardType, idx: number) => (
                     <tr key={idx} className="text-center
                     odd:bg-gray-dark-500
@@ -36,7 +65,7 @@ function ScoreTable({scoreBoard}: {
                         <td>{score.username}</td>
                         <td>{score.winStreak}</td>
                         <td>{score.gameMode === 1 ? "Solo" : "Multijoeur"}</td>
-                        <td>{new Date(score.timestamp).toLocaleString()}</td>
+                        <td className="max-sm:hidden">{new Date(score.timestamp).toLocaleString()}</td>
                     </tr>
                 ))
             }

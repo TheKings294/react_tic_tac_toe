@@ -18,7 +18,7 @@ function FormGame() {
 
     const setStateForGame = (e: React.FormEvent) => {
         e.preventDefault()
-        setGameMode(gameMode)
+        setGameMode(gameMode as 1 | 2)
         const players = []
 
         if (arePlayer === 2) {

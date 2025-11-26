@@ -1,10 +1,20 @@
 import {Link, NavLink} from "react-router";
 import {useState} from "react";
 import logo from '../assets/tic_tac_toe.webp'
-import {House, ChartNoAxesCombined} from 'lucide-react'
+import {House, ChartNoAxesCombined, GamepadDirectional} from 'lucide-react'
+import {useLocalStorage} from "@/hooks/useLocalStorage.tsx";
+import type {SaverGame} from "@/types/BoardType.ts";
 
 function Navbar() {
     const [open, setOpen] = useState(false);
+    const [game] = useLocalStorage<SaverGame>('game', {
+        username: "",
+        player1Wins: 0,
+        ties: 0,
+        player2Wins: 0,
+        playerTurn: "X",
+        moves: []
+    });
 
     return (
         <nav className="w-full border-b border-b-gray-light">
@@ -52,6 +62,21 @@ function Navbar() {
                         <ChartNoAxesCombined />
                         Leader Board
                     </NavLink>
+                    {
+                        game.username !== "" ?
+                            <NavLink to="/game" className={({ isActive, isPending }) => (
+                                isActive ? "bg-orange px-3 py-2 rounded-xl border border-transparent transition-all " +
+                                    "duration-200 hover:scale-105 flex flex-row justify-center gap-2" :
+                                    isPending ? "px-3 py-2 bg-gray-darker transition-all duration-200 hover:scale-105" :
+                                        "btn mr-1 px-3 py-2 rounded-xl text-base transition-all duration-200 hover:scale-105 " +
+                                        "hover:border-orange border border-transparent text-white flex flex-row justify-center gap-2"
+                            )}>
+                                <GamepadDirectional />
+                                Game
+                            </NavLink>
+                            :
+                            ""
+                    }
                 </div>
             </div>
         </nav>

@@ -20,7 +20,7 @@ export type BoardContextType = {
     gameMode: number;
     players: PlayerType[];
     setPlayers: (players: PlayerType[]) => void;
-    setGameMode: (gameMdoe: number) => void;
+    setGameMode: (gameMdoe: 1 |2) => void;
     winner: PlayerType | undefined;
     nextGame: () => void;
 }
@@ -44,7 +44,7 @@ export const BoardContext = createContext<BoardContextType>({
     setPlayers: (players: PlayerType[]) => {
         return players;
     },
-    setGameMode: (gameMdoe: number) => {
+    setGameMode: (gameMdoe: 1 | 2) => {
         return gameMdoe;
     },
     winner: undefined,

@@ -44,7 +44,7 @@ export function reducer(state: BoardContextType, action: BoardAction): BoardCont
         case 'switch_player':
             return {
                 ...state,
-                curentPlayer: action.payload.curentPlayer as string,
+                curentPlayer: state.curentPlayer === "X" ? "O" : "X" as string,
             };
         case 'switch_modal':
             return {
@@ -89,6 +89,28 @@ export function reducer(state: BoardContextType, action: BoardAction): BoardCont
             return {
                 ...state,
                 winner: action.payload.winner
+            }
+        case 'reset':
+            return {
+                ...state,
+                board: INITIAL_BOARD,
+                curentPlayer: "X",
+                isFinished: false,
+                history: [],
+                players: [],
+                gameMode: 1,
+                winner: undefined,
+            }
+        case 'set_game':
+            if (!action.payload.gameMode || !action.payload.players || !action.payload.history || !action.payload.board) {
+                return state
+            }
+            return {
+                ...state,
+                players: action.payload.players,
+                gameMode: action.payload.gameMode,
+                history: action.payload.history,
+                board: action.payload.board
             }
         default:
             return state;

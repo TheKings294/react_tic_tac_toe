@@ -16,3 +16,12 @@ export type GameStats = {
     player2Wins: number,
     playerTurn: "X" | "O"
 }
+
+export type SaverGame = {
+    username: string,
+    player1Wins: number,
+    ties: number,
+    player2Wins: number,
+    playerTurn: "X" | "O"
+    moves: History
+}

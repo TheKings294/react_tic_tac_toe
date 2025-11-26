@@ -2,7 +2,7 @@ import {type ReactNode, useEffect, useReducer} from "react";
 import {BoardContext, type BoardContextType} from "@/context/BoardContext.tsx";
 import {reducer, initialState as boardInitialState} from "@/utils/reducer.ts";
 import {easyBot} from "@/game-logic/easyBot.ts";
-import type {BoardType, GameStats, History, Move, Pattern} from "@/types/BoardType.ts";
+import type {BoardType, GameStats, History, Move, Pattern, SaverGame} from "@/types/BoardType.ts";
 import type {PlayerType} from "@/types/PlayerType.ts";
 import {useLocalStorage} from "@/hooks/useLocalStorage.tsx";
 import {INITIAL_BOARD} from "@/constant/Constant.ts";
@@ -19,13 +19,62 @@ export function BoardProvider({children}: {children: ReactNode}) {
         playerTurn: "X"
     })
     const [, setScoreboard] = useLocalStorage<ScoreboardType[]>("scoreboard", []);
+    const [game, setGame] = useLocalStorage<SaverGame>("game", {
+        username: gameState.username,
+        player1Wins: gameState.player1Wins,
+        ties: gameState.ties,
+        player2Wins: gameState.player2Wins,
+        playerTurn: gameState.playerTurn,
+        moves: []
+    });
 
     const saveGame = (): void => {
-
+        setGame((prevGame) => ({
+            ...prevGame,
+            moves: state.history,
+            username: gameState.username,
+            player1Wins: gameState.player1Wins,
+            ties: gameState.ties,
+            player2Wins: gameState.player2Wins,
+            playerTurn: gameState.playerTurn,
+        }))
     }
 
     const leaveGame = () => {
+        window.localStorage.removeItem("gameState");
+        window.localStorage.removeItem("game");
+        dispatch({
+            type: "reset",
+            payload: {}
+        })
+    }
 
+    const loadGame = (): void => {
+        const newBoard: BoardType = INITIAL_BOARD
+
+        game.moves.forEach((move) => {
+            newBoard[move.move.x][move.move.y] = move.player.name
+        })
+
+        dispatch({
+            type: 'set_game',
+            payload: {
+                players: [
+                    {name: game.username}
+                ],
+                gameMode: 1,
+                history: game.moves,
+                board: newBoard,
+            }
+        })
+
+        setGameState((prevState) => ({
+            ...prevState,
+            username: game.username,
+            player1Wins: game.player1Wins,
+            ties: game.ties,
+            player2Wins: game.player2Wins,
+        }))
     }
 
     const SwitchModalState = () => {
@@ -36,34 +85,38 @@ export function BoardProvider({children}: {children: ReactNode}) {
     }
 
     const setPlayersFunction = (players: PlayerType[]) => {
-        setGameState({
-            ...gameState,
-            username: players[0].name,
-        })
+        setGameState((prevState) => ({
+            ...prevState,
+            username: players[0]?.name,
+        }));
+
         dispatch({
             type: "set_players",
             payload: {players: players},
         })
     }
 
-    const setGameModeFunction = (gameMode: number) => {
+    const setGameModeFunction = (gameModeValue: 1 | 2) => {
+        setGameState((prevState) => ({
+            ...prevState,
+            gameMode: gameModeValue,
+        }))
         dispatch({
             type: "set_game_mode",
-            payload: {gameMode: gameMode},
+            payload: {gameMode: gameModeValue},
         })
     }
 
     const switchPlayer = (): void => {
         if (state.winner?.name) return;
-        const notCurentPlayer = state.curentPlayer === "X" ? "O" : "X"
-        setGameState({
-            ...gameState,
-            playerTurn: notCurentPlayer,
-        })
+        setGameState((prevState) => ({
+            ...prevState,
+            playerTurn: prevState.playerTurn === "X" ? "O" : "X",
+        }));
 
         dispatch({
             type: "switch_player",
-            payload: {curentPlayer: notCurentPlayer}
+            payload: {}
         })
     }
 
@@ -86,6 +139,9 @@ export function BoardProvider({children}: {children: ReactNode}) {
     const checkIfPlayeMoreThan3 = (historic: History) => {
         const playerMoves = historic.filter(move => move.player.name === state.curentPlayer)
         return playerMoves.length > 3
+    }
+    const checkIfGameIsTie = (board: BoardType) => {
+        return board.flat().every(cell => cell !== "#")
     }
 
     const placeMove = (move: Move): void => {
@@ -155,6 +211,38 @@ export function BoardProvider({children}: {children: ReactNode}) {
     
     const checkIfAsWin = (board: BoardType) => {
         const winner = winningChecker(board);
+
+        if (!winner && checkIfGameIsTie(board)) {
+            setGameState((prevState) => {
+                return ({
+                    ...prevState,
+                    playerTurn: "X",
+                    ties: prevState.ties + 1,
+                })
+            })
+
+            dispatch({
+                type: 'set_finish',
+                payload: {isFinished: true}
+            })
+
+            dispatch({
+                type: "set_history",
+                payload: {history: []}
+            })
+
+            SwitchModalState()
+
+            setTimeout(() => {
+                dispatch({
+                    type: "set_board",
+                    payload: {board: INITIAL_BOARD}
+                })
+            }, 2000);
+
+            return false;
+        }
+
         if (!winner) return false;
 
         let newGameState = structuredClone(gameState);
@@ -226,7 +314,7 @@ export function BoardProvider({children}: {children: ReactNode}) {
         curentPlayer: state.curentPlayer,
         winCondition: checkIfAsWin,
         saveGame: saveGame,
-        loadGame: () => {},
+        loadGame: loadGame,
         leaveGame: leaveGame,
         isFinished: state.isFinished,
         timer: state.timer,
